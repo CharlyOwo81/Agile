@@ -7,7 +7,7 @@ function App() {
     <Container className="mt-5">
       <h1>Plataforma de Experiencias Locales</h1>
       <p>¡Frontend listo con React y Bootstrap!</p>
-      <Button variant="success">Empezar a Registrarse</Button>
+      <Button variant="success">Empezar a Registrarse</Button> //Vamos a ver si así si jala
     </Container>
   )
 }
