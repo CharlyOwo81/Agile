@@ -1,15 +1,23 @@
 // src/App.tsx
-import './App.css'
-import { Container, Button } from 'react-bootstrap' // Importa los componentes
+import { Container, Row, Col } from 'react-bootstrap';
+import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
+import './App.css';
 
 function App() {
   return (
-    <Container className="mt-5">
-      <h1>Plataforma de Experiencias Locales</h1>
-      <p>¡Frontend listo con React y Bootstrap!</p>
-      <Button variant="success">Empezar a Registrarse</Button> //Vamos a ver si así si jala
+    <Container>
+      <h1 className="text-center my-5">Plataforma de Experiencias Locales</h1>
+      <Row>
+        <Col md={6}>
+          <RegisterForm />
+        </Col>
+        <Col md={6}>
+          <LoginForm />
+        </Col>
+      </Row>
     </Container>
-  )
+  );
 }
 
-export default App
+export default App;
