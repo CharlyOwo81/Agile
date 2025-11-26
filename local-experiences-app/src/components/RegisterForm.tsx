@@ -1,31 +1,41 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
-import { Form, Button, Container, Alert } from 'react-bootstrap';
-import axios from 'axios';
+import { useState } from "react";
+import { Form, Button, Alert, Container } from "react-bootstrap";
+import axios from "axios";
 
+// 1. Definimos un tipo unión para cubrir todos los posibles inputs de Bootstrap
 type FormControlElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
-type FormData = {
+interface FormData {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
   phone: string;
   dateOfBirth: string;
   role: string;
-};
+}
 
-const RegisterForm = () => {
+interface StatusMsg {
+  type: string;
+  msg: string;
+}
+
+export default function RegisterForm() {
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    password: '',
-    phone: '',
-    dateOfBirth: '',
-    role: 'tourist',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    dateOfBirth: "",
+    role: "tourist",
   });
 
-  const [status, setStatus] = useState<{ type: string; msg: string } | null>(null);
+  const [status, setStatus] = useState<StatusMsg | null>(null);
 
+  // 2. Usamos el tipo FormControlElement en el evento
   const handleChange = (e: React.ChangeEvent<FormControlElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -35,33 +45,43 @@ const RegisterForm = () => {
     e.preventDefault();
     setStatus(null);
 
+    // Validación local antes de enviar
+    if (formData.password !== formData.confirmPassword) {
+      setStatus({ type: "danger", msg: "Las contraseñas no coinciden." });
+      return;
+    }
+
     try {
-      await axios.post('http://localhost:3000/auth/register', formData);
+      // Extraemos confirmPassword para no enviarlo a la API
+      const { confirmPassword, ...payload } = formData;
+
+      await axios.post("http://localhost:3000/auth/register", payload);
+
       setStatus({
-        type: 'success',
-        msg: '¡Registro exitoso! Ahora puedes iniciar sesión.',
+        type: "success",
+        msg: "¡Registro exitoso! Ahora puedes iniciar sesión.",
       });
     } catch (error: any) {
       setStatus({
-        type: 'danger',
-        msg: error.response?.data?.message || 'Error al registrarse',
+        type: "danger",
+        msg: error.response?.data?.message || "Error al registrarse",
       });
     }
   };
 
   return (
-    <Container className="mt-4 p-4 border rounded">
-      <h3>Crear Cuenta</h3>
-
+    <Container className="mt-4 p-4 border rounded" style={{ maxWidth: '500px' }}>
+      <h3>Registro de Usuario</h3>
+      <hr />
+      
       {status && <Alert variant={status.type}>{status.msg}</Alert>}
 
       <Form onSubmit={handleSubmit}>
-
         <Form.Group className="mb-3">
-          <Form.Label>Nombre</Form.Label>
+          <Form.Label>Nombre Completo</Form.Label>
           <Form.Control
             name="name"
-            value={formData.name}
+            value={formData.name} // 3. Vinculamos el value al estado
             onChange={handleChange}
             required
           />
@@ -91,6 +111,21 @@ const RegisterForm = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
+          <Form.Label>Repetir Contraseña</Form.Label>
+          <Form.Control
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+            isInvalid={formData.confirmPassword !== "" && formData.password !== formData.confirmPassword}
+          />
+          <Form.Control.Feedback type="invalid">
+            Las contraseñas no coinciden.
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
           <Form.Label>Teléfono</Form.Label>
           <Form.Control
             name="phone"
@@ -106,7 +141,7 @@ const RegisterForm = () => {
             name="dateOfBirth"
             value={formData.dateOfBirth}
             onChange={handleChange}
-            required
+            required // Generalmente la fecha es requerida para lógica de negocio
           />
         </Form.Group>
 
@@ -122,12 +157,10 @@ const RegisterForm = () => {
           </Form.Select>
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button type="submit" className="w-100" variant="primary">
           Registrarse
         </Button>
       </Form>
     </Container>
   );
-};
-
-export default RegisterForm;
+}
