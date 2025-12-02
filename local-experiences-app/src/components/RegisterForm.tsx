@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { Form, Button, Alert, Container } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-// 1. Definimos un tipo unión para cubrir todos los posibles inputs de Bootstrap
 type FormControlElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 interface FormData {
@@ -17,10 +19,9 @@ interface FormData {
   role: string;
 }
 
-interface StatusMsg {
-  type: string;
-  msg: string;
-}
+// Expresiones Regulares
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState<FormData>({
@@ -33,57 +34,78 @@ export default function RegisterForm() {
     role: "tourist",
   });
 
-  const [status, setStatus] = useState<StatusMsg | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // 2. Usamos el tipo FormControlElement en el evento
   const handleChange = (e: React.ChangeEvent<FormControlElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!EMAIL_REGEX.test(formData.email)) {
+      newErrors.email = "Ingresa un correo electrónico válido.";
+    }
+
+    if (!PASSWORD_REGEX.test(formData.password)) {
+      // Mensaje actualizado para ser más claro
+      newErrors.password = "Mínimo 8 caracteres. Debe incluir letras, números y algún símbolo (., @, -, etc).";
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Las contraseñas no coinciden.";
+    }
+
+    if (!formData.dateOfBirth) {
+      newErrors.dateOfBirth = "La fecha de nacimiento es requerida.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus(null);
 
-    // Validación local antes de enviar
-    if (formData.password !== formData.confirmPassword) {
-      setStatus({ type: "danger", msg: "Las contraseñas no coinciden." });
+    if (!validateForm()) {
+      toast.warning("Por favor corrige los errores en el formulario.");
       return;
     }
 
     try {
-      // Extraemos confirmPassword para no enviarlo a la API
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...payload } = formData;
 
       await axios.post("http://localhost:3000/auth/register", payload);
 
-      setStatus({
-        type: "success",
-        msg: "¡Registro exitoso! Ahora puedes iniciar sesión.",
+      toast.success("¡Registro exitoso! Ahora puedes iniciar sesión.");
+      
+      setFormData({
+        name: "", email: "", password: "", confirmPassword: "", phone: "", dateOfBirth: "", role: "tourist"
       });
+
     } catch (error: any) {
-      setStatus({
-        type: "danger",
-        msg: error.response?.data?.message || "Error al registrarse",
-      });
+      const msg = error.response?.data?.message || "Error al registrarse";
+      toast.error(typeof msg === 'string' ? msg : "Ocurrió un error en el servidor");
     }
   };
 
   return (
-    <Container className="mt-4 p-4 border rounded" style={{ maxWidth: '500px' }}>
-      <h3>Registro de Usuario</h3>
-      <hr />
-      
-      {status && <Alert variant={status.type}>{status.msg}</Alert>}
-
+    <div className="mt-2">
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Nombre Completo</Form.Label>
           <Form.Control
             name="name"
-            value={formData.name} // 3. Vinculamos el value al estado
+            value={formData.name}
             onChange={handleChange}
             required
+            placeholder="Ej. Juan Pérez"
           />
         </Form.Group>
 
@@ -95,7 +117,10 @@ export default function RegisterForm() {
             value={formData.email}
             onChange={handleChange}
             required
+            placeholder="correo@ejemplo.com"
+            isInvalid={!!errors.email}
           />
+          <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -106,8 +131,10 @@ export default function RegisterForm() {
             value={formData.password}
             onChange={handleChange}
             required
-            minLength={6}
+            placeholder="Mín. 8 caracteres, letras, números y símbolos"
+            isInvalid={!!errors.password}
           />
+          <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -118,11 +145,10 @@ export default function RegisterForm() {
             value={formData.confirmPassword}
             onChange={handleChange}
             required
-            isInvalid={formData.confirmPassword !== "" && formData.password !== formData.confirmPassword}
+            placeholder="Repite la contraseña"
+            isInvalid={!!errors.confirmPassword}
           />
-          <Form.Control.Feedback type="invalid">
-            Las contraseñas no coinciden.
-          </Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -131,6 +157,7 @@ export default function RegisterForm() {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
+            placeholder="+52 123 456 7890"
           />
         </Form.Group>
 
@@ -141,8 +168,10 @@ export default function RegisterForm() {
             name="dateOfBirth"
             value={formData.dateOfBirth}
             onChange={handleChange}
-            required // Generalmente la fecha es requerida para lógica de negocio
+            required
+            isInvalid={!!errors.dateOfBirth}
           />
+          <Form.Control.Feedback type="invalid">{errors.dateOfBirth}</Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -161,6 +190,6 @@ export default function RegisterForm() {
           Registrarse
         </Button>
       </Form>
-    </Container>
+    </div>
   );
 }
