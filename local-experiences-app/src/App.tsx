@@ -1,15 +1,24 @@
-// src/App.tsx
-import './App.css'
-import { Container, Button } from 'react-bootstrap' // Importa los componentes
+// --- ESTE ARCHIVO ES EL PUNTO DE ENTRADA DE TU APP REACT (Frontend) ---
+
+import React from 'react';
+import MercadoPagoCheckout from './components/MercadoPagoCheckout'; // Importa el componente de checkout
+import './App.css'; // Si usas estilos CSS
 
 function App() {
   return (
-    <Container className="mt-5">
-      <h1>Plataforma de Experiencias Locales</h1>
-      <p>¡Frontend listo con React y Bootstrap!</p>
-      <Button variant="success">Empezar a Registrarse</Button> //Vamos a ver si así si jala
-    </Container>
-  )
+    <div className="App" style={{ textAlign: 'center' }}>
+      <p>Realiza tu pago de forma segura.</p>
+      
+      {/* Aquí renderizas el componente de Checkout que 
+        contiene la lógica de llamada al servidor
+      */}
+      <MercadoPagoCheckout />
+      
+      <footer>
+        <p></p>
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;
