@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+/* eslint-disable prettier/prettier */
+import { Experience } from 'src/experiences/entities/experience.entity';
+import { Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany } from 'typeorm';
 
 @Entity('users')
 @Unique(['email'])
@@ -26,4 +28,7 @@ export class User {
 
   @Column({ type: 'date' })
   dateOfBirth: Date;
+
+  @OneToMany(() => Experience, (exp) => exp.provider)
+  experiences: Experience[];
 }

@@ -11,8 +11,6 @@ export interface Experience {
   images: string[];
   status: 'active' | 'inactive' | 'draft';
   providerId: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface CreateExperienceData {
@@ -24,5 +22,4 @@ export interface CreateExperienceData {
   date: string;
   maxCapacity: number;
   images: string[];
-  status: 'active' | 'inactive' | 'draft';
 }
