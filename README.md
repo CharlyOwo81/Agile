@@ -10,6 +10,11 @@ El proyecto está organizado en dos directorios principales:
 * **`local-experiences-app`**: Frontend desarrollado en **React + Vite**. Interfaz de usuario para turistas y proveedores de experiencias, utilizando Bootstrap para los estilos.
 
 ---
+# Link de acceso al tablero de Kanban
+
+https://app.clickup.com/9017402089/v/li/901707051763
+
+---
 
 ## 🛠️ Requisitos Previos
 
@@ -23,29 +28,29 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente en tu entorno:
 
 ## 🚀 Guía de Inicio Rápido
 
-Para levantar el entorno completo, necesitarás **dos terminales** abiertas.
+Para levantar el entorno completo, se necesitará **dos terminales** abiertas, y, preferentemente, Docker Destop corriendo.
 
 ### Paso 1: Levantar el Backend y la Base de Datos
 
 En tu **primera terminal**:
 
-1.  Entra a la carpeta del API:
+1.  Entre a la carpeta del API:
     ```bash
     cd local-experiences-api
     ```
 
-2.  Instala las dependencias del servidor:
+2.  Instale las dependencias del servidor:
     ```bash
     npm install
     ```
 
-3.  Levanta la base de datos PostgreSQL usando Docker:
+3.  Levante la base de datos PostgreSQL usando Docker:
     ```bash
     docker-compose up -d
     ```
     > **Nota:** Esto creará un contenedor llamado `local_experiences_db` exponiendo el puerto **5436** (para no conflictos con puertos por defecto).
 
-4.  Inicia el servidor en modo desarrollo:
+4.  Inicie el servidor en modo desarrollo:
     ```bash
     npm run start:dev
     ```
@@ -57,20 +62,20 @@ En tu **primera terminal**:
 
 En tu **segunda terminal**:
 
-1.  Entra a la carpeta de la aplicación web:
+1.  Entre a la carpeta de la aplicación web:
     ```bash
     cd local-experiences-app
     ```
 
-2.  Instala las dependencias del cliente:
+2.  Instale las dependencias del cliente:
     ```bash
     npm install
     ```
 
-3.  Inicia el servidor de desarrollo de Vite:
+3.  Inicie el servidor de desarrollo de Vite:
     ```bash
     npm run dev
     ```
-    ✅ El Frontend estará disponible generalmente en: `http://localhost:5173`
+    ✅ El Frontend estará disponible en: `http://localhost:5173`
 
 ---
