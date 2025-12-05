@@ -2,6 +2,12 @@
 
 Este repositorio contiene el código fuente completo para la plataforma de gestión de experiencias locales. El sistema está dividido en dos componentes principales: una API RESTful (Backend) y una aplicación web (Frontend), soportados por una base de datos PostgreSQL containerizada.
 
+## Integrantes
+
+Héctor Francisco Báez Luque - 00000247283 
+Fedra Valeria Cervantes Mellado - 00000244780
+Gamaliel Armenta Pérez - 00000245254
+
 ## 📂 Estructura del Proyecto
 
 El proyecto está organizado en dos directorios principales:
