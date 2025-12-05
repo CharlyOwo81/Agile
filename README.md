@@ -78,4 +78,5 @@ En tu **segunda terminal**:
     ```
     ✅ El Frontend estará disponible en: `http://localhost:5173`
 
+    > **Nota:** Si quiere probarlo, le recomiendo hacer un usuario provedor..
 ---
