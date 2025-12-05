@@ -15,7 +15,6 @@ El proyecto está organizado en dos directorios principales:
 * **`local-experiences-api`**: Backend desarrollado en **NestJS**. Maneja la lógica de negocio, autenticación (JWT), conexión a base de datos y endpoints REST.
 * **`local-experiences-app`**: Frontend desarrollado en **React + Vite**. Interfaz de usuario para turistas y proveedores de experiencias, utilizando Bootstrap para los estilos.
 
----
 ## 📌 Kanban del Proyecto
 
 🔗 **Tablero en ClickUp:**  
