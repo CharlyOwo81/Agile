@@ -2,11 +2,11 @@
 
 Este repositorio contiene el código fuente completo para la plataforma de gestión de experiencias locales. El sistema está dividido en dos componentes principales: una API RESTful (Backend) y una aplicación web (Frontend), soportados por una base de datos PostgreSQL containerizada.
 
-## Integrantes
+##  👥 Integrantes
 
-Héctor Francisco Báez Luque - 00000247283 
-Fedra Valeria Cervantes Mellado - 00000244780
-Gamaliel Armenta Pérez - 00000245254
+* Héctor Francisco Báez Luque - 00000247283 
+* Fedra Valeria Cervantes Mellado - 00000244780
+* Gamaliel Armenta Pérez - 00000245254
 
 ## 📂 Estructura del Proyecto
 
@@ -16,8 +16,9 @@ El proyecto está organizado en dos directorios principales:
 * **`local-experiences-app`**: Frontend desarrollado en **React + Vite**. Interfaz de usuario para turistas y proveedores de experiencias, utilizando Bootstrap para los estilos.
 
 ---
-# Link de acceso al tablero de Kanban
+## 📌 Kanban del Proyecto
 
+🔗 **Tablero en ClickUp:**  
 https://app.clickup.com/9017402089/v/li/901707051763
 
 ---
